@@ -19,6 +19,8 @@ export class CrearPerfilComponent implements OnInit {
   tipoMensaje: 'success' | 'error' = 'success';
   mostrarPopup: boolean = false;
   perfilEdicion: any = null;
+  mostrarPopupConfirmacion: boolean = false; // Nueva variable para el popup de confirmación
+  idPerfilAEliminar: number | null = null; // ID del perfil a eliminar
 
   constructor(private perfilService: PerfilService) {}
 
@@ -75,15 +77,32 @@ export class CrearPerfilComponent implements OnInit {
     this.mostrarPopup = false;
   }
 
+  // Método para eliminar el perfil y mostrar el popup de confirmación
   eliminarPerfil(id: number): void {
-    this.perfilService.eliminarPerfil(id).subscribe({
-      next: () => {
-        this.obtenerPerfiles();
-      },
-      error: (error) => {
-        console.error('Error al eliminar perfil', error);
-      }
-    });
+    this.idPerfilAEliminar = id; // Guarda el ID del perfil a eliminar
+    this.mostrarPopupConfirmacion = true; // Muestra el popup de confirmación
+  }
+
+  // Método para confirmar la eliminación
+  confirmarEliminacion(): void {
+    if (this.idPerfilAEliminar !== null) {
+      this.perfilService.eliminarPerfil(this.idPerfilAEliminar).subscribe({
+        next: (response) => {
+          alert(response); // Muestra la respuesta del servidor
+          this.obtenerPerfiles(); // Actualiza la lista de perfiles
+        },
+        error: (error) => {
+          console.error('Error al eliminar perfil', error);
+        }
+      });
+    }
+    this.cerrarPopupConfirmacion(); // Cierra el popup
+  }
+
+  // Método para cerrar el popup de confirmación
+  cerrarPopupConfirmacion(): void {
+    this.mostrarPopupConfirmacion = false; // Cierra el popup
+    this.idPerfilAEliminar = null; // Resetea el ID del perfil
   }
 
   editarPerfil(perfil: any): void {
