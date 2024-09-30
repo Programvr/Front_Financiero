@@ -1,48 +1,66 @@
 <div class="container mt-5">
-    <h2 class="text-center">Crear Perfil</h2>
-    <form (ngSubmit)="crearPerfil()" class="border p-4 rounded shadow">
-      <div class="mb-3">
-        <label for="nombre" class="form-label">Nombre del perfil:</label>
-        <input type="text" id="nombre" [(ngModel)]="nombre" name="nombre" class="form-control" required />
-      </div>
-      <button type="submit" class="btn btn-primary">{{ perfilEdicion ? 'Actualizar' : 'Crear' }}</button>
-    </form>
-  
-    <div class="mt-4">
-      <h3 class="text-center">Perfiles</h3>
-      <input type="text" [(ngModel)]="searchTerm" class="form-control mb-3" placeholder="Buscar perfil..." />
-      <table class="table table-bordered">
-        <thead>
-          <tr>
-            <th>Nombre</th>
-            <th>Acciones</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let perfil of filteredPerfiles">
-            <td>{{ perfil.nombre }}</td>
-            <td>
-              <button class="btn btn-warning me-2" (click)="editarPerfil(perfil)">Editar</button>
-              <button class="btn btn-danger" (click)="eliminarPerfil(perfil.id_perfil)">Eliminar</button>
-            </td>
-          </tr>
-        </tbody>
-      </table>
+  <h2 class="text-center">Crear Perfil</h2>
+  <form (ngSubmit)="crearPerfil()" class="border p-4 rounded shadow">
+    <div class="mb-3">
+      <label for="nombre" class="form-label">Nombre del perfil:</label>
+      <input type="text" id="nombre" [(ngModel)]="nombre" name="nombre" class="form-control" required />
     </div>
-  
-    <!-- Popup -->
-    <div class="modal" tabindex="-1" style="display: block;" *ngIf="mostrarPopup" (click)="cerrarPopup()">
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header" [ngClass]="tipoMensaje === 'success' ? 'bg-success' : 'bg-danger'">
-            <h5 class="modal-title" style="color: white;">{{ tipoMensaje === 'success' ? 'Éxito' : 'Error' }}</h5>
-            <button type="button" class="btn-close" (click)="cerrarPopup()"></button>
-          </div>
-          <div class="modal-body">
-            <p>{{ mensaje }}</p>
-          </div>
+    <button type="submit" class="btn btn-primary">{{ perfilEdicion ? 'Actualizar' : 'Crear' }}</button>
+  </form>
+
+  <div class="mt-4">
+    <h3 class="text-center">Perfiles</h3>
+    <input type="text" [(ngModel)]="searchTerm" class="form-control mb-3" placeholder="Buscar perfil..." />
+    <table class="table table-bordered">
+      <thead>
+        <tr>
+          <th>Nombre</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let perfil of filteredPerfiles">
+          <td>{{ perfil.nombre }}</td>
+          <td>
+            <button class="btn btn-warning me-2" (click)="editarPerfil(perfil)">Editar</button>
+            <button class="btn btn-danger" (click)="eliminarPerfil(perfil.id_perfil)">Eliminar</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Popup de Mensaje -->
+  <div class="modal" tabindex="-1" style="display: block;" *ngIf="mostrarPopup" (click)="cerrarPopup()">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header" [ngClass]="tipoMensaje === 'success' ? 'bg-success' : 'bg-danger'">
+          <h5 class="modal-title" style="color: white;">{{ tipoMensaje === 'success' ? 'Éxito' : 'Error' }}</h5>
+          <button type="button" class="btn-close" (click)="cerrarPopup()"></button>
+        </div>
+        <div class="modal-body">
+          <p>{{ mensaje }}</p>
         </div>
       </div>
     </div>
   </div>
-  
+
+  <!-- Popup de Confirmación -->
+  <div class="modal" tabindex="-1" style="display: block;" *ngIf="mostrarPopupConfirmacion" (click)="cerrarPopupConfirmacion()">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header bg-warning">
+          <h5 class="modal-title" style="color: white;">Confirmación</h5>
+          <button type="button" class="btn-close" (click)="cerrarPopupConfirmacion()"></button>
+        </div>
+        <div class="modal-body">
+          <p>¿Estás seguro de que deseas eliminar este perfil?</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" (click)="cerrarPopupConfirmacion()">Cancelar</button>
+          <button type="button" class="btn btn-danger" (click)="confirmarEliminacion()">Eliminar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
