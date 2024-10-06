@@ -14,11 +14,15 @@ import { PerfilService } from '../perfil.service';
 export class CrearPerfilComponent implements OnInit {
   nombre: string = '';
   perfiles: any[] = [];
+  modulos: any[] = [];
+  modulosDisponibles: any[] = [];
   searchTerm: string = '';
   mensaje: string = '';
   tipoMensaje: 'success' | 'error' = 'success';
   mostrarPopup: boolean = false;
   perfilEdicion: any = null;
+  perfil: string = '';
+  mostrarPopupEdicion = false;
   mostrarPopupConfirmacion: boolean = false; // Nueva variable para el popup de confirmación
   idPerfilAEliminar: number | null = null; // ID del perfil a eliminar
 
@@ -40,22 +44,7 @@ export class CrearPerfilComponent implements OnInit {
   }
 
   crearPerfil(): void {
-    if (this.perfilEdicion) {
-      this.perfilService.editarPerfil(this.perfilEdicion.id_perfil, this.nombre).subscribe({
-        next: (response) => {
-          this.mensaje = 'Se editó correctamente el perfil';
-          this.tipoMensaje = 'success';
-          this.mostrarPopup = true;
-          this.obtenerPerfiles();
-          this.resetForm();
-        },
-        error: (error) => {
-          this.mensaje = 'Error: No se pudo editar el perfil';
-          this.tipoMensaje = 'error';
-          this.mostrarPopup = true;
-        }
-      });
-    } else {
+    
       this.perfilService.crearPerfil(this.nombre).subscribe({
         next: (response) => {
           this.mensaje = 'Se creó correctamente el perfil';
@@ -70,7 +59,7 @@ export class CrearPerfilComponent implements OnInit {
           this.mostrarPopup = true;
         }
       });
-    }
+    
   }
 
   cerrarPopup(): void {
@@ -105,14 +94,127 @@ export class CrearPerfilComponent implements OnInit {
     this.idPerfilAEliminar = null; // Resetea el ID del perfil
   }
 
-  editarPerfil(perfil: any): void {
-    this.perfilEdicion = perfil;
-    this.nombre = perfil.nombre; // Cargar el nombre en el campo de entrada
+  
+
+  editarPerfil(perfilEdicion: any) {
+    console.log('Editando perfil:', perfilEdicion);
+    this.perfil = perfilEdicion.nombre;
+    this.perfilEdicion = perfilEdicion; // Guarda el perfil a editar
+    this.mostrarPopupEdicion = true; // Abre el popup de edición
+    console.log('Mostrar Popup Edición:', this.mostrarPopupEdicion);
+  
+    // Obtiene los módulos asignados
+    this.perfilService.getModulosxPerfil(perfilEdicion.id_perfil).subscribe({
+      next: (data) => {
+        this.modulos = data;
+        console.log('Módulos asignados:', this.modulos);
+      },
+      error: (error) => {
+        console.error('Error al obtener módulos por perfil', error);
+      }
+    });
+  
+    // Obtiene los módulos disponibles
+    this.perfilService.getModulosFaltantes(perfilEdicion.id_perfil).subscribe({
+      next: (data) => {
+        this.modulosDisponibles = data;
+        console.log('Módulos disponibles:', this.modulosDisponibles);
+      },
+      error: (error) => {
+        console.error('Error al obtener módulos faltantes', error);
+      }
+    });
   }
+
+  toggleLecturaEscritura(modulo: any, tipo: 'lectura' | 'escritura'): void {
+    if (tipo === 'lectura') {
+      modulo.lectura = true; // Asegura que la lectura esté activa
+      modulo.escritura = false; // Desactiva escritura
+    } else {
+      modulo.lectura = false; // Desactiva lectura
+      modulo.escritura = true; // Asegura que escritura esté activa
+    }
+  }
+
+  quitarModulo(modulo: any): void {
+    // Encuentra el índice del módulo en la lista de módulos asignados
+    const index = this.modulos.findIndex(m => m.id_modulo === modulo.id_modulo);
+    
+    if (index > -1) {
+      // Elimina el módulo de modulos
+      this.modulos.splice(index, 1);
+      
+      // Agrega el módulo de nuevo a modulosDisponibles
+      this.modulosDisponibles.push({
+        id_modulo: modulo.id_modulo,
+        nombre_modulo: modulo.nombreModulo
+      });
+    }
+  }
+  
+
+
+  agregarModulo(moduloDisponible: any, event: MouseEvent): void {
+    event.preventDefault(); // Previene el comportamiento predeterminado del botón
+    event.stopPropagation(); // Detiene la propagación del evento, evita que el modal se cierre
+  
+    // Verifica que el módulo no esté ya en la lista de módulos asignados
+    const existe = this.modulos.some(modulo => modulo.id_modulo === moduloDisponible.id_modulo);
+  
+    if (!existe) {
+      // Agrega el módulo disponible a la lista de módulos asignados
+      this.modulos.push({
+        id_modulo: moduloDisponible.id_modulo,
+        nombreModulo: moduloDisponible.nombre_modulo,
+        lectura: false, // Puedes inicializar estos valores como lo necesites
+        escritura: false
+      });
+  
+      // Encuentra el índice del módulo en modulosDisponibles
+      const index = this.modulosDisponibles.findIndex(modulo => modulo.id_modulo === moduloDisponible.id_modulo);
+  
+      if (index > -1) {
+        // Elimina el módulo de modulosDisponibles
+        this.modulosDisponibles.splice(index, 1);
+      }
+    }
+  }
+  
 
   resetForm(): void {
     this.nombre = '';
     this.perfilEdicion = null; // Resetear la edición
+  }
+  cerrarPopupEdicion() {
+    this.mostrarPopupEdicion = false;
+  }
+
+  actualizarPerfil() {
+    const nuevosModulos = this.modulos.map(modulo => ({
+      id_modulo: modulo.id_modulo,
+      rol: modulo.lectura && modulo.escritura ? 'lectura-escritura' : 
+           modulo.lectura ? 'L' : 'E'
+    }));
+  
+    this.perfilService.actualizarModulosPorPerfil(this.perfilEdicion.id_perfil, nuevosModulos)
+      .subscribe(
+        response => {
+          // Cierra el popup de edición
+          this.mostrarPopupEdicion = false;
+  
+          // Muestra el mensaje devuelto por el API
+          this.mensaje = response.respuesta;  // Asumiendo que el API devuelve el mensaje como string
+          this.tipoMensaje = 'success';
+          this.mostrarPopup = true; // Abre el popup de mensaje
+        },
+        error => {
+          this.mostrarPopupEdicion = false;
+          // En caso de error, muestra un mensaje genérico
+          this.mensaje = 'Error al editar el perfil';
+          this.tipoMensaje = 'error'; // Cambié esto a 'danger' para indicar un error
+          this.mostrarPopup = true; // Abre el popup de mensaje
+        }
+      );
   }
 
   get filteredPerfiles() {
