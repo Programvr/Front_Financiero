@@ -6,23 +6,33 @@ import { Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class PerfilService {
-  private apiUrl = 'http://192.168.0.4:8080/Back_Finan/api/perfiles';
+  private apiUrl = 'http://192.168.0.4:8080/api';
 
   constructor(private http: HttpClient) {}
 
   crearPerfil(nombre: string): Observable<any> {
-    return this.http.post(this.apiUrl+"/crearPerfil", { nombre });
+    return this.http.post(this.apiUrl+"/perfiles/crearPerfil", { nombre });
   }
 
   getPerfiles(): Observable<any[]> {
-    return this.http.get<any[]>(this.apiUrl+"/obtenerPerfiles");
+    return this.http.get<any[]>(this.apiUrl+"/perfiles/obtenerPerfiles");
   }
 
-  editarPerfil(id: number, nombre: string): Observable<any> {
-    return this.http.put(`http://192.168.0.4:8080/Back_Finan/api/perfiles/${id}`, { nombre });
-  }  
+  getModulosxPerfil(id: number): Observable<any[]> {
+    return this.http.get<any[]>(this.apiUrl+`/modulos/modulosxperfil/${id}`);
+  } 
+  
+  getModulosFaltantes(id: number): Observable<any[]> {
+    return this.http.get<any[]>(this.apiUrl+`/modulos/modulosFaltantes/${id}`);
+  } 
 
   eliminarPerfil(id: number): Observable<string> {
-    return this.http.delete(`${this.apiUrl}/${id}`,{responseType: 'text'});
+    return this.http.delete(this.apiUrl+`/perfiles/${id}`,{responseType: 'text'});
   }
+
+  // Agrega esto en tu PerfilService
+  actualizarModulosPorPerfil(id: number, modulos: any[]): Observable<any> {
+    return this.http.post(`${this.apiUrl}/modulos/actualizar/${id}`, modulos);
+  }
+
 }
