@@ -5,7 +5,7 @@
       <label for="nombre" class="form-label">Nombre del perfil:</label>
       <input type="text" id="nombre" [(ngModel)]="nombre" name="nombre" class="form-control" required />
     </div>
-    <button type="submit" class="btn btn-primary">{{ perfilEdicion ? 'Actualizar' : 'Crear' }}</button>
+    <button type="submit" class="btn btn-primary">Crear</button>
   </form>
 
   <div class="mt-4">
@@ -59,6 +59,74 @@
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" (click)="cerrarPopupConfirmacion()">Cancelar</button>
           <button type="button" class="btn btn-danger" (click)="confirmarEliminacion()">Eliminar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Popup de Edición de Perfil -->
+  <div class="modal" tabindex="-1" style="display: block;" *ngIf="mostrarPopupEdicion" >
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header bg-primary">
+          <h5 class="modal-title" style="color: white;">Editar Perfil: {{ perfil }}</h5>
+          <button type="button" class="btn-close" (click)="cerrarPopupEdicion()"></button>
+        </div>
+        <div class="modal-body">
+          <h6>Módulos Asignados:</h6>
+          <table class="table table-bordered">
+            <thead>
+              <tr>
+                <th>Módulo</th>
+                <th>Lectura</th>
+                <th>Escritura</th>
+                <th>Acción</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let modulo of modulos">
+                <td>{{ modulo.nombreModulo }}</td>
+                <td>
+                  <input 
+                    type="checkbox" 
+                    [(ngModel)]="modulo.lectura" 
+                    (change)="toggleLecturaEscritura(modulo, 'lectura')" 
+                  />
+                </td>
+                <td>
+                  <input 
+                    type="checkbox" 
+                    [(ngModel)]="modulo.escritura" 
+                    (change)="toggleLecturaEscritura(modulo, 'escritura')" 
+                  />
+                </td>
+                <td>
+                  <button class="btn btn-danger" (click)="quitarModulo(modulo)">-</button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+          <h6>Módulos Disponibles:</h6>
+        <table class="table table-bordered">
+          <thead>
+            <tr>
+              <th>Módulo</th>
+              <th>Acción</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let moduloDisponible of modulosDisponibles">
+              <td>{{ moduloDisponible.nombre_modulo }}</td>
+              <td>
+                <button class="btn btn-success" (click)="agregarModulo(moduloDisponible, $event)">+</button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" (click)="cerrarPopupEdicion()">Cancelar</button>
+          <button type="button" class="btn btn-primary" (click)="actualizarPerfil()">Guardar</button>
         </div>
       </div>
     </div>
