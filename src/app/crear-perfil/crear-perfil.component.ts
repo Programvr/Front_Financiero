@@ -44,7 +44,11 @@ export class CrearPerfilComponent implements OnInit {
   }
 
   crearPerfil(): void {
-    
+    if (!this.nombre || this.nombre.trim() === '' ||  this.nombre.includes(' ')) {
+      this.mensaje = 'El nombre del perfil no puede estar vacío o contener solo espacios';
+      this.tipoMensaje = 'error';
+      this.mostrarPopup = true;
+    } else{
       this.perfilService.crearPerfil(this.nombre).subscribe({
         next: (response) => {
           this.mensaje = 'Se creó correctamente el perfil';
@@ -59,7 +63,7 @@ export class CrearPerfilComponent implements OnInit {
           this.mostrarPopup = true;
         }
       });
-    
+    }
   }
 
   cerrarPopup(): void {
@@ -128,13 +132,30 @@ export class CrearPerfilComponent implements OnInit {
 
   toggleLecturaEscritura(modulo: any, tipo: 'lectura' | 'escritura'): void {
     if (tipo === 'lectura') {
-      modulo.lectura = true; // Asegura que la lectura esté activa
-      modulo.escritura = false; // Desactiva escritura
+        // Si se activa lectura
+        modulo.lectura = !modulo.lectura;
+        modulo.escritura = !modulo.escritura;  // Cambia el estado de lectura
+        if (modulo.lectura) {
+            modulo.escritura = false; // Desactiva escritura si lectura se activa
+        }
     } else {
-      modulo.lectura = false; // Desactiva lectura
-      modulo.escritura = true; // Asegura que escritura esté activa
+        // Si se activa escritura
+        modulo.escritura = !modulo.escritura; // Cambia el estado de escritura
+        if (modulo.escritura) {
+            modulo.lectura = false; // Desactiva lectura si escritura se activa
+        }
     }
-  }
+
+    // Asegúrate de que al menos uno esté seleccionado
+    if (!modulo.lectura && !modulo.escritura) {
+        modulo.lectura = true; // Activa lectura si ambos están desmarcados
+    }
+
+}
+
+
+
+
 
   quitarModulo(modulo: any): void {
     // Encuentra el índice del módulo en la lista de módulos asignados
@@ -156,29 +177,30 @@ export class CrearPerfilComponent implements OnInit {
 
   agregarModulo(moduloDisponible: any, event: MouseEvent): void {
     event.preventDefault(); // Previene el comportamiento predeterminado del botón
-    event.stopPropagation(); // Detiene la propagación del evento, evita que el modal se cierre
-  
+    event.stopPropagation(); // Detiene la propagación del evento
+
     // Verifica que el módulo no esté ya en la lista de módulos asignados
     const existe = this.modulos.some(modulo => modulo.id_modulo === moduloDisponible.id_modulo);
-  
+
     if (!existe) {
-      // Agrega el módulo disponible a la lista de módulos asignados
-      this.modulos.push({
-        id_modulo: moduloDisponible.id_modulo,
-        nombreModulo: moduloDisponible.nombre_modulo,
-        lectura: false, // Puedes inicializar estos valores como lo necesites
-        escritura: false
-      });
-  
-      // Encuentra el índice del módulo en modulosDisponibles
-      const index = this.modulosDisponibles.findIndex(modulo => modulo.id_modulo === moduloDisponible.id_modulo);
-  
-      if (index > -1) {
-        // Elimina el módulo de modulosDisponibles
-        this.modulosDisponibles.splice(index, 1);
-      }
+        // Agrega el módulo disponible a la lista de módulos asignados
+        this.modulos.push({
+            id_modulo: moduloDisponible.id_modulo,
+            nombreModulo: moduloDisponible.nombre_modulo,
+            lectura: true, // Inicializa lectura como true
+            escritura: false // Inicializa escritura como false
+        });
+
+        // Encuentra el índice del módulo en modulosDisponibles
+        const index = this.modulosDisponibles.findIndex(modulo => modulo.id_modulo === moduloDisponible.id_modulo);
+
+        if (index > -1) {
+            // Elimina el módulo de modulosDisponibles
+            this.modulosDisponibles.splice(index, 1);
+        }
     }
-  }
+}
+
   
 
   resetForm(): void {

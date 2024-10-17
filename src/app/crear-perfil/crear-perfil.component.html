@@ -87,23 +87,24 @@
               <tr *ngFor="let modulo of modulos">
                 <td>{{ modulo.nombreModulo }}</td>
                 <td>
-                  <input 
-                    type="checkbox" 
-                    [(ngModel)]="modulo.lectura" 
-                    (change)="toggleLecturaEscritura(modulo, 'lectura')" 
-                  />
+                    <input 
+                        type="checkbox" 
+                        [checked]="modulo.lectura" 
+                        (change)="toggleLecturaEscritura(modulo, 'lectura')" 
+                    />
                 </td>
                 <td>
-                  <input 
-                    type="checkbox" 
-                    [(ngModel)]="modulo.escritura" 
-                    (change)="toggleLecturaEscritura(modulo, 'escritura')" 
-                  />
+                    <input 
+                        type="checkbox" 
+                        [checked]="modulo.escritura" 
+                        (change)="toggleLecturaEscritura(modulo, 'escritura')" 
+                    />
                 </td>
                 <td>
-                  <button class="btn btn-danger" (click)="quitarModulo(modulo)">-</button>
+                    <button class="btn btn-danger" (click)="quitarModulo(modulo)">-</button>
                 </td>
-              </tr>
+            </tr>
+            
             </tbody>
           </table>
           <h6>Módulos Disponibles:</h6>
