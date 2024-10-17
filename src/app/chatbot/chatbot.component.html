@@ -1,0 +1,25 @@
+<div class="chatbot-container d-flex justify-content-center align-items-center" style="height: 100vh;">
+  <div class="card" style="width: 400px; max-height: 500px; overflow-y: auto;">
+    <div class="card-body">
+      <div class="messages" style="max-height: 400px; overflow-y: auto; margin-bottom: 10px;">
+        <div *ngFor="let message of messages" class="message">
+          <div class="user-message alert alert-primary" role="alert">
+            {{ message.user }}
+          </div>
+          <div class="bot-message alert alert-secondary" role="alert">
+            {{ message.bot }}
+          </div>
+        </div>
+      </div>
+      <div class="input-group">
+        <input 
+          [(ngModel)]="userMessage" 
+          (keydown.enter)="sendMessage()" 
+          class="form-control" 
+          placeholder="Escribe tu mensaje..." 
+        />
+        <button (click)="sendMessage()" class="btn btn-primary">Enviar</button>
+      </div>
+    </div>
+  </div>
+</div>
