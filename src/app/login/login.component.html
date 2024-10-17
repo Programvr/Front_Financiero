@@ -1,0 +1,21 @@
+<div class="d-flex justify-content-center align-items-start vh-99 mt-5">
+    <div class="card p-4 shadow" style="width: 400px;">
+      <div class="card-body">
+        <h2 class="card-title text-center mb-4">Iniciar Sesión</h2>
+        <div class="form-group">
+          <label for="username">Usuario</label>
+          <input [(ngModel)]="username" type="text" class="form-control" id="username" placeholder="Ingresa tu usuario">
+        </div>
+        <div class="form-group mt-3">
+          <label for="password">Contraseña</label>
+          <input [(ngModel)]="password" type="password" class="form-control" id="password" placeholder="Ingresa tu contraseña">
+        </div>
+        <button (click)="login()" class="btn btn-primary w-100 mt-4">Iniciar Sesión</button>
+  
+        <div *ngIf="loginResponse" class="alert alert-info mt-3 text-center">
+          {{ loginResponse }}
+        </div>
+      </div>
+    </div>
+  </div>
+  
