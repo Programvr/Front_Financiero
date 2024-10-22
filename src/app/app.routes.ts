@@ -6,6 +6,6 @@ import { ChatbotComponent } from './chatbot/chatbot.component';
 export const routes: Routes = [
   { path: '', redirectTo: 'Login', pathMatch: 'full' }, // Redirigir a 'CreacionPerfil'
   { path: 'Login', component: LoginComponent },
-  { path: 'CreacionPerfil', component: CrearPerfilComponent },
+  { path: 'Perfiles', component: CrearPerfilComponent },
   { path: 'Chat', component: ChatbotComponent }
 ];

@@ -15,4 +15,9 @@ export class LoginService {
     const user = { id_usuario,login, password };
     return this.http.post<any>(this.apiUrl+'/usuarios/login', user);
   }
+
+  getModulosPorUsuario(userId: number): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/perfiles/modulosPorUsuario/${userId}`);
+  }
+  
 }

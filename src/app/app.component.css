@@ -30,3 +30,21 @@
     text-align: center;
     margin-top: 0px;
   }
+
+  header {
+    margin-bottom: 20px;
+  }
+  
+  .navbar {
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  .nav-link {
+    color: #007bff; /* Color del texto del enlace */
+  }
+  
+  .nav-link:hover {
+    color: #0056b3; /* Color del texto al pasar el ratón */
+    text-decoration: underline; /* Subrayar al pasar el ratón */
+  }
+  
