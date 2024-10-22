@@ -1,0 +1,19 @@
+.card {
+    border-radius: 10px;
+  }
+  
+  .card-title {
+    font-size: 1.5rem;
+    font-weight: bold;
+  }
+  
+  .form-control {
+    font-size: 1.1rem;
+    padding: 10px;
+  }
+  
+  .btn-primary {
+    font-size: 1.1rem;
+    padding: 10px;
+  }
+  

@@ -7,7 +7,7 @@ import { Observable } from 'rxjs';
 })
 export class PerfilService {
 
-  private apiUrl = 'http://192.168.0.4:8082/Back_Finan/api';
+  private apiUrl = 'http://localhost:8080/api';
 
 
   constructor(private http: HttpClient) {}

@@ -179,11 +179,13 @@
 
 <main class="main">
   <div class="content">
-    <div class="left-side">
-      <img src="https://images.pexels.com/photos/844124/pexels-photo-844124.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" alt="Logo" class="logo"/>
-      <h1 class="text-light">Bienvenidos, </h1>
-      <h1 class="text-light">Finanzas Personales</h1>
-    </div>
+    <div class="d-flex justify-content-center align-items-center vh-100 left-side">
+      <img src="https://images.pexels.com/photos/844124/pexels-photo-844124.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" alt="Logo" class="logo me-3"/>
+      <div>
+        <h3 class="text-light">Bienvenidos,</h3>
+        <h3 class="text-light">Ayuda Manejo De Finanzas</h3>
+      </div>
+    </div>        
     <div class="divider" role="separator" aria-label="Divider"></div>
     <div class="right-side">
       
@@ -193,6 +195,23 @@
     </div>
   </div>
 </main>
+<header class="bg-light">
+  <nav class="navbar navbar-expand-lg navbar-light" *ngIf="viewMenu">
+    <a class="navbar-brand" href="#">Cerrar Sesión</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav">
+        <li class="nav-item" *ngFor="let item of menuItems">
+          <a class="nav-link" [routerLink]="item.ruta">{{ item.nombre_modulo }}</a>
+        </li>
+      </ul>
+    </div>
+  </nav>
+</header>
+
+
 
 <!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * -->
 <!-- * * * * * * * * * * * The content above * * * * * * * * * * * * -->
@@ -204,6 +223,26 @@
 
 
 
-<router-outlet></router-outlet>
 
+  <!-- Aquí va el contenido principal de tu aplicación -->
+  
+      <router-outlet></router-outlet>
+      <!-- Todo el contenido de la página, incluyendo el formulario de login -->
+    
+  
+    <footer class="bg-dark text-light py-3 mt-auto">
+      <div class="container text-center">
+        <p>Esta solución fue creada por <strong>Marlon Valbuena</strong> y <strong>Sebastian Valbuena</strong>.</p>
+        <p>Contacto: 
+          <a href="mailto:marlon_l_g&#64;outlook.com" class="text-info">marlon_l_g&#64;outlook.com</a> |  | 
+          Tel: <a href="tel:+573229243710" class="text-info">322 924 3710</a> |
+          <a href="https://www.linkedin.com/in/marlon-valbuena-98805519a?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app" target="_blank" class="text-info">
+            <i class="bi bi-linkedin"></i> LinkedIn
+          </a>
+        </p>
+        <p class="small">© 2024 Todos los derechos reservados</p>
+      </div>
+    </footer>
+  
+  
 
