@@ -13,7 +13,7 @@ interface BotResponse {
 })
 
 export class ChatService {
-  private apiUrl = 'http://192.168.0.4:8082/api'; // URL de tu API de Flask
+  private apiUrl = 'http://192.168.0.4:8082/Back_Finan/api'; // URL de tu API de Flask
 
   constructor(private http: HttpClient) {}
 
